@@ -70,7 +70,7 @@ function Tilt({ children, className = "", max = 7 }: { children: ReactNode; clas
   return <motion.div onMouseMove={move} onMouseLeave={() => { rx.set(0); ry.set(0); }} style={{ rotateX: rx, rotateY: ry, transformPerspective: 1100 }} className={`will-change-transform ${className}`}>{children}</motion.div>;
 }
 
-const orbSeeds = [[6,12,140,9],[18,68,90,14],[31,26,60,11],[44,82,120,17],[57,18,70,13],[69,58,110,15],[80,34,80,10],[92,74,130,16],[12,46,70,12],[38,90,95,18],[63,88,60,12],[88,10,100,14]];
+const orbSeeds: [number,number,number,number][] = [[6,12,140,9],[18,68,90,14],[31,26,60,11],[44,82,120,17],[57,18,70,13],[69,58,110,15],[80,34,80,10],[92,74,130,16],[12,46,70,12],[38,90,95,18],[63,88,60,12],[88,10,100,14]];
 function Particles() {
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll();
