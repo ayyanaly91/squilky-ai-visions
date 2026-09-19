@@ -165,7 +165,30 @@
 @utility marquee-left { animation: marquee-left 38s linear infinite; }
 @utility marquee-right { animation: marquee-right 42s linear infinite; }
 
+/* Logo renders with a black matte; screen blending drops it into dark surfaces seamlessly. */
+@utility logo-blend {
+  mix-blend-mode: screen;
+  filter: brightness(1.12) contrast(1.06);
+}
+
+@keyframes aura-drift { 0%,100% { transform: translate3d(-4%, 0, 0) scale(1); opacity: .55; } 50% { transform: translate3d(4%, -6%, 0) scale(1.12); opacity: .9; } }
+@keyframes border-sweep { to { background-position: 200% 0; } }
+@keyframes float-slow { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes status-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(0,229,255,.55); } 70% { box-shadow: 0 0 0 9px rgba(0,229,255,0); } }
+
+@utility animate-aura { animation: aura-drift 14s ease-in-out infinite; }
+@utility animate-float-slow { animation: float-slow 9s ease-in-out infinite; }
+@utility animate-status { animation: status-pulse 2.4s ease-out infinite; }
+
+@utility gradient-border {
+  background-image: linear-gradient(90deg, rgba(0,229,255,.55), rgba(124,58,237,.55), rgba(0,229,255,.55));
+  background-size: 200% 100%;
+  animation: border-sweep 6s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .animate-orb, .animate-grid, .marquee-left, .marquee-right { animation: none; }
+  .animate-orb, .animate-grid, .marquee-left, .marquee-right,
+  .animate-aura, .animate-float-slow, .animate-status, .gradient-border { animation: none; }
 }
+
