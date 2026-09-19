@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowDownRight, ArrowRight, Bot, Braces, ChartNoAxesCombined, CircuitBoard, Sparkles, Workflow } from "lucide-react";
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { useRef, type MouseEvent, type ReactNode } from "react";
+import { ArrowDownRight, ArrowRight, ArrowUp, Bot, ChartNoAxesCombined, CircuitBoard, Github, Instagram, Linkedin, Mail, Send, Sparkles, Twitter, Workflow } from "lucide-react";
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
+import { useRef, useState, type MouseEvent, type ReactNode } from "react";
+
 import { Button } from "@/components/ui/button";
 import logoAsset from "@/assets/squilky-logo.png.asset.json";
 import aiOrb from "@/assets/ai-neural-orb.png";
