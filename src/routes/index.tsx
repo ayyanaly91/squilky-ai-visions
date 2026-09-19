@@ -117,7 +117,7 @@ function StatsSection() {
 }
 
 function ContactButton({ children = "Start a Project" }: { children?: ReactNode }) {
-  return <Magnet><Button asChild className="group relative h-14 rounded-full border border-primary/30 bg-primary px-7 text-sm font-semibold uppercase tracking-wider text-primary-foreground shadow-[0_0_35px_rgba(0,229,255,.22)] hover:bg-primary/85"><a href="#contact"><span aria-hidden className="text-shimmer pointer-events-none absolute inset-0 rounded-full" />{children}<ArrowDownRight className="transition-transform group-hover:translate-x-1 group-hover:translate-y-1" /></a></Button></Magnet>;
+  return <Beam><Magnet><Button asChild className="group relative h-14 rounded-full border border-primary/30 bg-primary px-7 text-sm font-semibold uppercase tracking-wider text-primary-foreground shadow-[0_0_35px_rgba(0,229,255,.22)] hover:bg-primary/85"><a href="#contact"><span aria-hidden className="text-shimmer pointer-events-none absolute inset-0 rounded-full" />{children}<ArrowDownRight className="transition-transform group-hover:translate-x-1 group-hover:translate-y-1" /></a></Button></Magnet></Beam>;
 }
 
 function Logo({ compact = false, className = "" }: { compact?: boolean; className?: string }) {
