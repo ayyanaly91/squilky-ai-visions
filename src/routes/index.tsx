@@ -44,9 +44,10 @@ function ContactButton({ children = "Start a Project" }: { children?: ReactNode 
   return <Magnet><Button asChild className="group h-14 rounded-full border border-primary/30 bg-primary px-7 text-sm font-semibold uppercase tracking-wider text-primary-foreground shadow-[0_0_35px_rgba(0,229,255,.22)] hover:bg-primary/85"><a href="#contact">{children}<ArrowDownRight className="transition-transform group-hover:translate-x-1 group-hover:translate-y-1" /></a></Button></Magnet>;
 }
 
-function Logo({ compact = false }: { compact?: boolean }) {
-  return <a href="#top" aria-label="Squilky.ai home" className="relative block overflow-hidden"><img src={logoAsset.url} alt="Squilky.ai" width={768} height={768} className={`${compact ? "h-20 w-20" : "h-16 w-16 md:h-20 md:w-20"} object-contain`} /><span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-primary shadow-[0_0_12px_#00e5ff]" /></a>;
+function Logo({ compact = false, className = "" }: { compact?: boolean; className?: string }) {
+  return <a href="#top" aria-label="Squilky.ai home" className={`group relative inline-block ${className}`}><span className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-primary/20 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" /><img src={logoAsset.url} alt="Squilky.ai" width={768} height={768} className={`logo-blend ${compact ? "h-20 w-20" : "h-16 w-16 md:h-20 md:w-20"} object-contain transition-transform duration-500 group-hover:scale-105`} /><span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-primary shadow-[0_0_12px_#00e5ff]" /></a>;
 }
+
 
 function HeroSection() {
   return <section id="top" className="relative flex h-screen min-h-[720px] flex-col overflow-hidden bg-background px-5 md:px-10">
