@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowDownRight, ArrowRight, ArrowUp, Bot, ChartNoAxesCombined, CircuitBoard, Github, Instagram, Linkedin, Mail, Send, Sparkles, Twitter, Workflow } from "lucide-react";
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
-import { useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { animate, motion, useInView, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
+import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
-import logoAsset from "@/assets/squilky-logo.png.asset.json";
+import logoTransparent from "@/assets/squilky-logo-transparent.png";
 import aiOrb from "@/assets/ai-neural-orb.png";
 import commerce from "@/assets/dashboard-commerce.jpg";
 import agent from "@/assets/dashboard-agent.jpg";
@@ -41,12 +41,87 @@ function Magnet({ children, className = "" }: { children: ReactNode; className?:
   return <div className={`transition-transform duration-200 ${className}`} onMouseMove={move} onMouseLeave={(e) => { e.currentTarget.style.transform = "translate3d(0,0,0)"; }}>{children}</div>;
 }
 
+
+function CursorSpotlight() {
+  const reduce = useReducedMotion();
+  const x = useMotionValue(-600), y = useMotionValue(-600);
+  const sx = useSpring(x, { stiffness: 90, damping: 26, mass: .6 });
+  const sy = useSpring(y, { stiffness: 90, damping: 26, mass: .6 });
+  useEffect(() => {
+    if (reduce) return;
+    const onMove = (e: globalThis.MouseEvent) => { x.set(e.clientX - 320); y.set(e.clientY - 320); };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [reduce, x, y]);
+  if (reduce) return null;
+  return <motion.div aria-hidden style={{ x: sx, y: sy }} className="pointer-events-none fixed left-0 top-0 z-0 hidden h-[640px] w-[640px] rounded-full bg-[radial-gradient(circle,rgba(0,229,255,.09),rgba(124,58,237,.07)_42%,transparent_70%)] blur-2xl will-change-transform md:block" />;
+}
+
+function Tilt({ children, className = "", max = 7 }: { children: ReactNode; className?: string; max?: number }) {
+  const reduce = useReducedMotion();
+  const rx = useSpring(useMotionValue(0), { stiffness: 140, damping: 18 });
+  const ry = useSpring(useMotionValue(0), { stiffness: 140, damping: 18 });
+  const move = (e: MouseEvent<HTMLDivElement>) => {
+    if (reduce) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    ry.set(((e.clientX - r.left) / r.width - .5) * max * 2);
+    rx.set(-((e.clientY - r.top) / r.height - .5) * max * 2);
+  };
+  return <motion.div onMouseMove={move} onMouseLeave={() => { rx.set(0); ry.set(0); }} style={{ rotateX: rx, rotateY: ry, transformPerspective: 1100 }} className={`will-change-transform ${className}`}>{children}</motion.div>;
+}
+
+const orbSeeds = [[6,12,140,9],[18,68,90,14],[31,26,60,11],[44,82,120,17],[57,18,70,13],[69,58,110,15],[80,34,80,10],[92,74,130,16],[12,46,70,12],[38,90,95,18],[63,88,60,12],[88,10,100,14]];
+function Particles() {
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const y = useSpring(useTransform(scrollYProgress, [0, 1], [0, -260]), { stiffness: 40, damping: 20 });
+  if (reduce) return null;
+  return <motion.div aria-hidden style={{ y }} className="pointer-events-none absolute inset-0 z-0 overflow-hidden will-change-transform">
+    {orbSeeds.map(([left, top, size, dur], i) => <span key={i} className="animate-drift absolute rounded-full blur-[1px] will-change-transform" style={{ left: `${left}%`, top: `${top}%`, width: size / 10, height: size / 10, animationDuration: `${dur}s`, animationDelay: `${i * .7}s`, background: i % 2 ? "#7c3aed" : "#00e5ff", boxShadow: `0 0 ${size / 6}px ${i % 2 ? "#7c3aed" : "#00e5ff"}` }} />)}
+  </motion.div>;
+}
+
+function Beam({ children, className = "", radius = "rounded-full" }: { children: ReactNode; className?: string; radius?: string }) {
+  return <div className={`group/beam relative isolate overflow-hidden ${radius} p-px ${className}`}>
+    <span aria-hidden className="beam-ring pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[260%] w-[260%] -translate-x-1/2 -translate-y-1/2 opacity-40 transition-opacity duration-500 group-hover/beam:opacity-100" />
+    <div className={`relative ${radius} bg-background`}>{children}</div>
+  </div>;
+}
+
+const stats: [number, string, string][] = [[120, "+", "AI systems shipped"], [48, "%", "Average conversion lift"], [24, "/7", "Agents working for you"], [12, "x", "Faster support response"]];
+function Counter({ to, suffix }: { to: number; suffix: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-15%" });
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    if (!inView) return;
+    const controls = animate(0, to, { duration: 1.6, ease, onUpdate: (v) => setValue(Math.round(v)) });
+    return () => controls.stop();
+  }, [inView, to]);
+  return <span ref={ref} className="hero-heading text-[clamp(2.5rem,7vw,4.5rem)] font-black leading-none">{value}{suffix}</span>;
+}
+function StatsSection() {
+  return <section aria-label="Squilky.ai results" className="relative overflow-hidden bg-background px-4 py-16 sm:px-8 sm:py-24 md:px-10">
+    <Particles />
+    <div className="relative z-10 mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {stats.map(([n, suffix, label], i) => <FadeIn key={label} delay={i * .08}>
+        <Tilt className="h-full">
+          <div className="h-full rounded-3xl border border-foreground/10 bg-secondary/40 p-7 backdrop-blur-xl transition-all duration-500 hover:border-primary/40 hover:shadow-[0_0_45px_rgba(0,229,255,.16)]">
+            <Counter to={n} suffix={suffix} />
+            <p className="mt-4 text-sm font-light uppercase tracking-widest text-[#b8c7d9]">{label}</p>
+          </div>
+        </Tilt>
+      </FadeIn>)}
+    </div>
+  </section>;
+}
+
 function ContactButton({ children = "Start a Project" }: { children?: ReactNode }) {
-  return <Magnet><Button asChild className="group h-14 rounded-full border border-primary/30 bg-primary px-7 text-sm font-semibold uppercase tracking-wider text-primary-foreground shadow-[0_0_35px_rgba(0,229,255,.22)] hover:bg-primary/85"><a href="#contact">{children}<ArrowDownRight className="transition-transform group-hover:translate-x-1 group-hover:translate-y-1" /></a></Button></Magnet>;
+  return <Magnet><Button asChild className="group relative h-14 rounded-full border border-primary/30 bg-primary px-7 text-sm font-semibold uppercase tracking-wider text-primary-foreground shadow-[0_0_35px_rgba(0,229,255,.22)] hover:bg-primary/85"><a href="#contact"><span aria-hidden className="text-shimmer pointer-events-none absolute inset-0 rounded-full" />{children}<ArrowDownRight className="transition-transform group-hover:translate-x-1 group-hover:translate-y-1" /></a></Button></Magnet>;
 }
 
 function Logo({ compact = false, className = "" }: { compact?: boolean; className?: string }) {
-  return <a href="#top" aria-label="Squilky.ai home" className={`group relative inline-block ${className}`}><span className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-primary/20 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" /><img src={logoAsset.url} alt="Squilky.ai" width={768} height={768} className={`logo-blend ${compact ? "h-16 w-16 md:h-20 md:w-20" : "h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20"} object-contain transition-transform duration-500 group-hover:scale-105`} /><span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-primary shadow-[0_0_12px_#00e5ff]" /></a>;
+  return <a href="#top" aria-label="Squilky.ai home" className={`group relative inline-block ${className}`}><span className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-primary/20 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" /><img src={logoTransparent} alt="Squilky.ai" width={1254} height={1254} className={`${compact ? "h-16 w-16 md:h-20 md:w-20" : "h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20"} object-contain transition-transform duration-500 group-hover:scale-105`} /><span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-primary shadow-[0_0_12px_#00e5ff]" /></a>;
 }
 
 
@@ -62,7 +137,7 @@ function HeroSection() {
       <a href="#contact" className="flex h-11 w-11 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary backdrop-blur-lg" aria-label="Contact Squilky"><ArrowDownRight /></a>
     </motion.nav>
     <div className="relative z-20 mt-[8vh] text-center md:mt-[5vh]">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .1, duration: .7, ease }} className="mb-4 flex items-center justify-center gap-3 text-xs font-medium tracking-[.25em] text-primary md:text-sm"><span className="h-px w-10 bg-primary shadow-[0_0_8px_#00e5ff]" />AI WEB DEVELOPMENT • AI AGENTS<span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_10px_#00e5ff]" /></motion.div>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .1, duration: .7, ease }} className="relative mb-4 flex items-center justify-center gap-3 text-xs font-medium tracking-[.25em] text-primary md:text-sm"><span className="h-px w-10 bg-primary shadow-[0_0_8px_#00e5ff]" />AI WEB DEVELOPMENT • AI AGENTS<span aria-hidden className="text-shimmer pointer-events-none absolute inset-0" /><span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_10px_#00e5ff]" /></motion.div>
       <motion.h1 initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .15, duration: .9, ease }} className="hero-heading text-[12vw] font-black uppercase leading-[.78] tracking-tight sm:text-[11vw] lg:text-[10vw]">We build the<br/>future of business.</motion.h1>
     </div>
     <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .6, duration: 1, ease }} className="animate-orb pointer-events-none will-change-transform absolute left-1/2 top-[43%] z-10 w-[310px] -translate-x-1/2 sm:w-[400px] md:top-[38%] md:w-[500px] lg:w-[590px]"><img src={aiOrb} alt="Glowing AI neural network sphere" width={1024} height={1024} className="h-auto w-full drop-shadow-[0_0_60px_rgba(0,229,255,.2)]" /></motion.div>
@@ -180,6 +255,6 @@ function SiteFooter() {
 }
 
 function Index() {
-  return <main className="overflow-x-clip bg-background"><ScrollProgress/><HeroSection/><MarqueeSection/><AboutSection/><ServicesSection/><ProjectsSection/><ContactSection/><SiteFooter/></main>;
+  return <main className="relative overflow-x-clip bg-background"><ScrollProgress/><CursorSpotlight/><HeroSection/><MarqueeSection/><AboutSection/><ServicesSection/><ProjectsSection/><StatsSection/><ContactSection/><SiteFooter/></main>;
 }
 
