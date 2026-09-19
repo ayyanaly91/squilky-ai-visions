@@ -108,6 +108,78 @@ function ProjectsSection() { return <section id="projects" className="relative z
 
 function ContactSection() { return <section id="contact" className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-5 py-24 text-center"><div className="pointer-events-none absolute h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgba(0,229,255,.16),rgba(124,58,237,.1)_38%,transparent_70%)] blur-2xl"/><FadeIn className="relative z-10 max-w-6xl"><Sparkles className="mx-auto mb-7 h-9 w-9 text-primary"/><h2 className="hero-heading text-[clamp(3rem,10vw,8.75rem)] font-black uppercase leading-[.9] tracking-tight">Let's build something intelligent.</h2><p className="mx-auto mt-8 max-w-2xl text-lg font-light text-[#b8c7d9]">Have an idea, business problem, or project in mind? Let's turn it into a powerful AI-powered digital experience.</p><div className="mt-10 flex flex-wrap items-center justify-center gap-4"><ContactButton/><Button asChild variant="outline" className="h-14 rounded-full border-foreground/20 bg-transparent px-7 text-foreground hover:bg-foreground/10 hover:text-foreground"><a href="#services">Explore Services <ArrowRight/></a></Button></div></FadeIn></section>; }
 
-function Index() {
-  return <main className="overflow-x-clip bg-background"><HeroSection/><MarqueeSection/><AboutSection/><ServicesSection/><ProjectsSection/><ContactSection/><footer className="flex items-center justify-between border-t border-foreground/10 bg-background px-5 py-6 md:px-10"><Logo compact/><p className="text-xs uppercase tracking-widest text-muted-foreground">© 2026 Squilky.ai</p><Braces className="text-primary"/></footer></main>;
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 28, restDelta: .001 });
+  return <motion.div style={{ scaleX }} className="fixed inset-x-0 top-0 z-50 h-[3px] origin-left bg-[linear-gradient(90deg,#00e5ff,#1687ff_45%,#7c3aed)] shadow-[0_0_14px_rgba(0,229,255,.5)]" />;
 }
+
+const footerNav: [string, string[]][] = [
+  ['Services', ['AI Website Development','AI Agents','AI Automation','Custom AI Solutions','Website & AI Optimization']],
+  ['Solutions', ['Ecommerce & Retail','SaaS & Startups','Professional Services','Lead Generation','Customer Support']],
+  ['Company', ['About Squilky','Our Process','Selected Work','Careers','Contact']],
+  ['Resources', ['AI Playbook','Case Studies','Insights','FAQ','Support']],
+  ['Legal', ['Privacy Policy','Terms of Service','Cookie Policy','Security','Accessibility']],
+];
+const socials: [string, typeof Twitter][] = [['X / Twitter', Twitter], ['LinkedIn', Linkedin], ['Instagram', Instagram], ['GitHub', Github]];
+
+function Newsletter() {
+  const [email, setEmail] = useState("");
+  const [sent, setSent] = useState(false);
+  return <form onSubmit={(e) => { e.preventDefault(); if (email.trim()) setSent(true); }} className="relative mt-7 w-full max-w-md">
+    <div className="gradient-border rounded-2xl p-px">
+      <div className="flex items-center gap-2 rounded-2xl bg-[#0b1220] p-2 transition-shadow duration-300 focus-within:shadow-[0_0_35px_rgba(0,229,255,.25)]">
+        <Mail className="ml-2 h-5 w-5 shrink-0 text-primary" />
+        <input value={email} onChange={(e) => { setEmail(e.target.value); setSent(false); }} type="email" required placeholder="Your work email" aria-label="Your work email" className="min-w-0 flex-1 bg-transparent py-3 text-sm text-foreground outline-none placeholder:text-muted-foreground" />
+        <Button type="submit" className="h-11 shrink-0 rounded-xl bg-primary px-4 text-xs font-semibold uppercase tracking-wider text-primary-foreground hover:bg-primary/85">{sent ? 'Sent' : 'Book'} <Send className="h-4 w-4" /></Button>
+      </div>
+    </div>
+    <p className="mt-3 text-xs uppercase tracking-widest text-muted-foreground">{sent ? "Thanks — we'll be in touch within 24 hours." : 'Free 20-minute AI consultation. No spam, ever.'}</p>
+  </form>;
+}
+
+function SiteFooter() {
+  return <footer className="relative overflow-hidden border-t border-foreground/10 bg-background pt-20 md:pt-28">
+    <div className="animate-aura pointer-events-none absolute -top-40 left-1/2 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(0,229,255,.14),rgba(124,58,237,.12)_40%,transparent_70%)] blur-3xl" />
+    <div className="animate-float-slow pointer-events-none absolute right-[8%] top-[22%] h-2 w-2 rounded-full bg-accent shadow-[0_0_18px_#7c3aed]" />
+    <div className="animate-float-slow pointer-events-none absolute left-[12%] top-[46%] h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_16px_#00e5ff]" />
+    <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 md:px-10">
+      <div className="grid gap-14 lg:grid-cols-[1.15fr_2fr]">
+        <FadeIn>
+          <Logo />
+          <p className="mt-6 max-w-sm text-lg font-light leading-relaxed text-[#b8c7d9]">Squilky.ai builds high-converting AI websites and intelligent agents for ambitious businesses — blending design, automation, and artificial intelligence into systems that work smarter.</p>
+          <Newsletter />
+        </FadeIn>
+        <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:grid-cols-5">
+          {footerNav.map(([title, items], i) => <FadeIn key={title} delay={i * .06}>
+            <h3 className="text-xs font-semibold uppercase tracking-[.22em] text-primary">{title}</h3>
+            <ul className="mt-5 space-y-3">{items.map(item => <li key={item}><a href="#contact" className="group inline-flex items-center gap-1.5 text-sm font-light text-[#b8c7d9] transition-colors duration-200 hover:text-foreground"><span className="h-px w-0 bg-primary transition-all duration-300 group-hover:w-3" />{item}</a></li>)}</ul>
+          </FadeIn>)}
+        </div>
+      </div>
+
+      <FadeIn delay={.1}>
+        <div className="mt-16 flex flex-col gap-6 border-t border-foreground/10 py-8 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center gap-6">
+            <span className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-secondary/40 px-4 py-2 text-xs uppercase tracking-widest text-[#dcebfa] backdrop-blur-lg"><span className="animate-status h-2 w-2 rounded-full bg-primary" />All systems operational</span>
+            <span className="inline-flex items-center gap-2.5 rounded-full border border-accent/30 bg-secondary/40 px-4 py-2 text-xs uppercase tracking-widest text-[#dcebfa] backdrop-blur-lg"><Sparkles className="h-3.5 w-3.5 text-accent" />Accepting Q4 projects</span>
+          </div>
+          <div className="flex items-center gap-3">
+            {socials.map(([label, Icon]) => <a key={label} href="#contact" aria-label={label} className="flex h-11 w-11 items-center justify-center rounded-full border border-foreground/10 bg-secondary/40 text-[#b8c7d9] backdrop-blur-lg transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:text-primary hover:shadow-[0_0_25px_rgba(0,229,255,.25)]"><Icon className="h-4.5 w-4.5" /></a>)}
+          </div>
+        </div>
+      </FadeIn>
+
+      <div className="flex flex-col gap-4 border-t border-foreground/10 py-8 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-xs uppercase tracking-widest text-muted-foreground">© 2026 Squilky.ai — AI Web Development & AI Agents</p>
+        <a href="#top" className="group inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#b8c7d9] transition-colors hover:text-primary">Back to top<span className="flex h-9 w-9 items-center justify-center rounded-full border border-foreground/15 transition-all duration-300 group-hover:-translate-y-1 group-hover:border-primary/50 group-hover:shadow-[0_0_20px_rgba(0,229,255,.3)]"><ArrowUp className="h-4 w-4" /></span></a>
+      </div>
+    </div>
+    <p aria-hidden className="hero-heading pointer-events-none select-none px-5 pb-6 text-center text-[19vw] font-black uppercase leading-[.8] tracking-tight opacity-[.07]">Squilky.ai</p>
+  </footer>;
+}
+
+function Index() {
+  return <main className="overflow-x-clip bg-background"><ScrollProgress/><HeroSection/><MarqueeSection/><AboutSection/><ServicesSection/><ProjectsSection/><ContactSection/><SiteFooter/></main>;
+}
+
