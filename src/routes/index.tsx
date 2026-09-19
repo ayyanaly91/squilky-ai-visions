@@ -175,7 +175,7 @@ function SiteFooter() {
         <a href="#top" className="group inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#b8c7d9] transition-colors hover:text-primary">Back to top<span className="flex h-9 w-9 items-center justify-center rounded-full border border-foreground/15 transition-all duration-300 group-hover:-translate-y-1 group-hover:border-primary/50 group-hover:shadow-[0_0_20px_rgba(0,229,255,.3)]"><ArrowUp className="h-4 w-4" /></span></a>
       </div>
     </div>
-    <p aria-hidden className="hero-heading pointer-events-none select-none px-5 pb-6 text-center text-[19vw] font-black uppercase leading-[.8] tracking-tight opacity-[.07]">Squilky.ai</p>
+    <p aria-hidden className="hero-heading pointer-events-none select-none px-5 pb-6 text-center text-[13.5vw] font-black uppercase leading-[.85] tracking-tighter opacity-[.07]">Squilky.ai</p>
   </footer>;
 }
 
