@@ -57,7 +57,7 @@ function HeroSection() {
     <motion.nav initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7, ease }} className="relative z-30 flex items-center justify-between pt-5 md:pt-7">
       <Logo />
       <div className="hidden items-center gap-10 rounded-full border border-foreground/10 bg-secondary/60 px-7 py-4 backdrop-blur-xl sm:flex">
-        {['About','Services','Projects','Contact'].map(x => <a key={x} href={`#${x.toLowerCase()}`} className="text-sm font-medium uppercase text-[#dcebfa] transition-opacity hover:opacity-70 lg:text-base">{x}</a>)}
+        {['About','Services','Projects','Contact'].map(x => <a key={x} href={`#${x.toLowerCase()}`} className="group relative text-sm font-medium uppercase tracking-wider text-[#dcebfa] transition-all duration-200 hover:text-primary hover:[text-shadow:0_0_14px_rgba(0,229,255,.55)] lg:text-base">{x}<span className="absolute -bottom-1 left-0 h-px w-0 bg-primary shadow-[0_0_8px_#00e5ff] transition-all duration-300 group-hover:w-full" /></a>)}
       </div>
       <a href="#contact" className="flex h-11 w-11 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary backdrop-blur-lg" aria-label="Contact Squilky"><ArrowDownRight /></a>
     </motion.nav>
