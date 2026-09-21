@@ -219,7 +219,6 @@ function ScrollProgress() {
   return <motion.div style={{ scaleX }} className="fixed inset-x-0 top-0 z-50 h-[3px] origin-left bg-[linear-gradient(90deg,#00e5ff,#1687ff_45%,#7c3aed)] shadow-[0_0_14px_rgba(0,229,255,.5)]" />;
 }
 
-const socials: [string, typeof Twitter][] = [['X / Twitter', Twitter], ['LinkedIn', Linkedin], ['Instagram', Instagram], ['GitHub', Github]];
 
 const INBOX = "squilky.ai@gmail.com";
 
