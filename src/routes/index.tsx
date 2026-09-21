@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowDownRight, ArrowRight, ArrowUp, Bot, ChartNoAxesCombined, CircuitBoard, Github, Instagram, Linkedin, Mail, Send, Sparkles, Twitter, Workflow } from "lucide-react";
-import { animate, motion, useInView, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
+import { AnimatePresence, animate, motion, useInView, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -190,27 +190,38 @@ function ScrollProgress() {
   return <motion.div style={{ scaleX }} className="fixed inset-x-0 top-0 z-50 h-[3px] origin-left bg-[linear-gradient(90deg,#00e5ff,#1687ff_45%,#7c3aed)] shadow-[0_0_14px_rgba(0,229,255,.5)]" />;
 }
 
-const footerNav: [string, string[]][] = [
-  ['Services', ['AI Website Development','AI Agents','AI Automation','Custom AI Solutions','Website & AI Optimization']],
-  ['Solutions', ['Ecommerce & Retail','SaaS & Startups','Professional Services','Lead Generation','Customer Support']],
-  ['Company', ['About Squilky','Our Process','Selected Work','Careers','Contact']],
-  ['Resources', ['AI Playbook','Case Studies','Insights','FAQ','Support']],
-  ['Legal', ['Privacy Policy','Terms of Service','Cookie Policy','Security','Accessibility']],
-];
 const socials: [string, typeof Twitter][] = [['X / Twitter', Twitter], ['LinkedIn', Linkedin], ['Instagram', Instagram], ['GitHub', Github]];
+
+const INBOX = "squilky.ai@gmail.com";
 
 function Newsletter() {
   const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
-  return <form onSubmit={(e) => { e.preventDefault(); if (email.trim()) setSent(true); }} className="relative mt-7 w-full max-w-md">
+  const [sent, setSent] = useState("");
+  function submit(e: React.FormEvent) {
+    e.preventDefault();
+    const value = email.trim();
+    if (!value) return;
+    const subject = encodeURIComponent("New inquiry from Squilky.ai website");
+    const body = encodeURIComponent(`Work email: ${value}\n\nI'd like to book a free 20-minute AI consultation.`);
+    window.location.href = `mailto:${INBOX}?subject=${subject}&body=${body}`;
+    setSent(value);
+    setEmail("");
+  }
+  return <form onSubmit={submit} className="relative mt-7 w-full max-w-md">
     <div className="gradient-border rounded-2xl p-px">
       <div className="flex items-center gap-2 rounded-2xl bg-[#0b1220] p-2 transition-shadow duration-300 focus-within:shadow-[0_0_35px_rgba(0,229,255,.25)]">
         <Mail className="ml-2 h-5 w-5 shrink-0 text-primary" />
-        <input value={email} onChange={(e) => { setEmail(e.target.value); setSent(false); }} type="email" required placeholder="Your work email" aria-label="Your work email" className="min-w-0 flex-1 bg-transparent py-3 text-sm text-foreground outline-none placeholder:text-muted-foreground" />
-        <Button type="submit" className="h-11 shrink-0 rounded-xl bg-primary px-4 text-xs font-semibold uppercase tracking-wider text-primary-foreground hover:bg-primary/85">{sent ? 'Sent' : 'Book'} <Send className="h-4 w-4" /></Button>
+        <input value={email} onChange={(e) => { setEmail(e.target.value); setSent(""); }} type="email" required placeholder="Your work email" aria-label="Your work email" className="min-w-0 flex-1 bg-transparent py-3 text-sm text-foreground outline-none placeholder:text-muted-foreground" />
+        <Button type="submit" className="h-11 shrink-0 rounded-xl bg-primary px-4 text-xs font-semibold uppercase tracking-wider text-primary-foreground hover:bg-primary/85">Send <Send className="h-4 w-4" /></Button>
       </div>
     </div>
-    <p className="mt-3 text-xs uppercase tracking-widest text-muted-foreground">{sent ? "Thanks — we'll be in touch within 24 hours." : 'Free 20-minute AI consultation. No spam, ever.'}</p>
+    <AnimatePresence mode="wait" initial={false}>
+      {sent
+        ? <motion.p key="sent" role="status" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: .4, ease: [.25, .1, .25, 1] }} className="mt-3 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-primary">
+            <Sparkles className="h-3.5 w-3.5" />Inquiry received! We&apos;ll contact you shortly at {sent}.
+          </motion.p>
+        : <motion.p key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .3 }} className="mt-3 text-xs uppercase tracking-widest text-muted-foreground">Free 20-minute AI consultation. No spam, ever.</motion.p>}
+    </AnimatePresence>
   </form>;
 }
 
@@ -220,19 +231,13 @@ function SiteFooter() {
     <div className="animate-float-slow pointer-events-none absolute right-[8%] top-[22%] h-2 w-2 rounded-full bg-accent shadow-[0_0_18px_#7c3aed]" />
     <div className="animate-float-slow pointer-events-none absolute left-[12%] top-[46%] h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_16px_#00e5ff]" />
     <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8 md:px-10">
-      <div className="grid gap-14 lg:grid-cols-[1.15fr_2fr]">
-        <FadeIn>
+      <FadeIn>
+        <div className="flex flex-col items-center text-center">
           <Logo />
-          <p className="mt-6 max-w-sm text-lg font-light leading-relaxed text-[#b8c7d9]">Squilky.ai builds high-converting AI websites and intelligent agents for ambitious businesses — blending design, automation, and artificial intelligence into systems that work smarter.</p>
+          <p className="mt-6 max-w-xl text-lg font-light leading-relaxed text-[#b8c7d9]">Squilky.ai builds high-converting AI websites and intelligent agents for ambitious businesses — blending design, automation, and artificial intelligence into systems that work smarter.</p>
           <Newsletter />
-        </FadeIn>
-        <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:grid-cols-5">
-          {footerNav.map(([title, items], i) => <FadeIn key={title} delay={i * .06}>
-            <h3 className="text-xs font-semibold uppercase tracking-[.22em] text-primary">{title}</h3>
-            <ul className="mt-5 space-y-3">{items.map(item => <li key={item}><a href="#contact" className="group inline-flex min-h-[32px] items-center gap-1.5 py-1 text-sm font-light text-[#b8c7d9] transition-colors duration-200 hover:text-foreground"><span className="h-px w-0 bg-primary transition-all duration-300 group-hover:w-3" />{item}</a></li>)}</ul>
-          </FadeIn>)}
         </div>
-      </div>
+      </FadeIn>
 
       <FadeIn delay={.1}>
         <div className="mt-16 flex flex-col gap-6 border-t border-foreground/10 py-8 sm:flex-row sm:items-center sm:justify-between">
