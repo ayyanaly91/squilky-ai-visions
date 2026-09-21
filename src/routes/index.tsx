@@ -231,19 +231,13 @@ function SiteFooter() {
     <div className="animate-float-slow pointer-events-none absolute right-[8%] top-[22%] h-2 w-2 rounded-full bg-accent shadow-[0_0_18px_#7c3aed]" />
     <div className="animate-float-slow pointer-events-none absolute left-[12%] top-[46%] h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_16px_#00e5ff]" />
     <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8 md:px-10">
-      <div className="grid gap-14 lg:grid-cols-[1.15fr_2fr]">
-        <FadeIn>
+      <FadeIn>
+        <div className="flex flex-col items-center text-center">
           <Logo />
-          <p className="mt-6 max-w-sm text-lg font-light leading-relaxed text-[#b8c7d9]">Squilky.ai builds high-converting AI websites and intelligent agents for ambitious businesses — blending design, automation, and artificial intelligence into systems that work smarter.</p>
+          <p className="mt-6 max-w-xl text-lg font-light leading-relaxed text-[#b8c7d9]">Squilky.ai builds high-converting AI websites and intelligent agents for ambitious businesses — blending design, automation, and artificial intelligence into systems that work smarter.</p>
           <Newsletter />
-        </FadeIn>
-        <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:grid-cols-5">
-          {footerNav.map(([title, items], i) => <FadeIn key={title} delay={i * .06}>
-            <h3 className="text-xs font-semibold uppercase tracking-[.22em] text-primary">{title}</h3>
-            <ul className="mt-5 space-y-3">{items.map(item => <li key={item}><a href="#contact" className="group inline-flex min-h-[32px] items-center gap-1.5 py-1 text-sm font-light text-[#b8c7d9] transition-colors duration-200 hover:text-foreground"><span className="h-px w-0 bg-primary transition-all duration-300 group-hover:w-3" />{item}</a></li>)}</ul>
-          </FadeIn>)}
         </div>
-      </div>
+      </FadeIn>
 
       <FadeIn delay={.1}>
         <div className="mt-16 flex flex-col gap-6 border-t border-foreground/10 py-8 sm:flex-row sm:items-center sm:justify-between">
