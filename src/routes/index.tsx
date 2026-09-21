@@ -268,14 +268,9 @@ function SiteFooter() {
       </FadeIn>
 
       <FadeIn delay={.1}>
-        <div className="mt-16 flex flex-col gap-6 border-t border-foreground/10 py-8 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap items-center gap-6">
-            <span className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-secondary/40 px-4 py-2 text-xs uppercase tracking-widest text-[#dcebfa] backdrop-blur-lg"><span className="animate-status h-2 w-2 rounded-full bg-primary" />All systems operational</span>
-            <span className="inline-flex items-center gap-2.5 rounded-full border border-accent/30 bg-secondary/40 px-4 py-2 text-xs uppercase tracking-widest text-[#dcebfa] backdrop-blur-lg"><Sparkles className="h-3.5 w-3.5 text-accent" />Accepting Q4 projects</span>
-          </div>
-          <div className="flex items-center gap-3">
-            {socials.map(([label, Icon]) => <a key={label} href="#contact" aria-label={label} className="flex h-11 w-11 items-center justify-center rounded-full border border-foreground/10 bg-secondary/40 text-[#b8c7d9] backdrop-blur-lg transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:text-primary hover:shadow-[0_0_25px_rgba(0,229,255,.25)]"><Icon className="h-4.5 w-4.5" /></a>)}
-          </div>
+        <div className="mt-16 flex flex-wrap items-center justify-center gap-4 border-t border-foreground/10 py-8">
+          <span className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-secondary/40 px-4 py-2 text-xs uppercase tracking-widest text-[#dcebfa] backdrop-blur-lg"><span className="animate-status h-2 w-2 rounded-full bg-primary" />All systems operational</span>
+          <span className="inline-flex items-center gap-2.5 rounded-full border border-accent/30 bg-secondary/40 px-4 py-2 text-xs uppercase tracking-widest text-[#dcebfa] backdrop-blur-lg"><Sparkles className="h-3.5 w-3.5 text-accent" />Accepting Q4 projects</span>
         </div>
       </FadeIn>
 
