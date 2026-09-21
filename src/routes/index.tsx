@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowDownRight, ArrowRight, ArrowUp, Bot, ChartNoAxesCombined, CircuitBoard, Github, Instagram, Linkedin, Mail, Send, Sparkles, Twitter, Workflow } from "lucide-react";
+import { ArrowDownRight, ArrowRight, ArrowUp, Bot, ChartNoAxesCombined, CircuitBoard, Mail, Send, Sparkles, Workflow, X } from "lucide-react";
 import { AnimatePresence, animate, motion, useInView, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 
@@ -10,6 +10,12 @@ import commerce from "@/assets/dashboard-commerce.jpg";
 import agent from "@/assets/dashboard-agent.jpg";
 import automation from "@/assets/dashboard-automation.jpg";
 import analytics from "@/assets/dashboard-analytics.jpg";
+import velora from "@/assets/work-velora.jpeg.asset.json";
+import salon from "@/assets/work-salon.jpeg.asset.json";
+import restaurant from "@/assets/work-restaurant.jpeg.asset.json";
+import agentWhatsapp from "@/assets/agent-whatsapp.webp.asset.json";
+import agentGmail from "@/assets/agent-gmail.webp.asset.json";
+import agentSupport from "@/assets/agent-support.webp.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -172,15 +178,38 @@ const services = [
 ];
 function ServicesSection() { return <section id="services" className="relative rounded-t-[40px] bg-[#f7fafc] px-4 py-16 sm:py-20 text-[#070b12] sm:px-8 md:rounded-t-[60px] md:px-10 md:py-32"><FadeIn><h2 className="mb-16 text-center text-[clamp(3rem,12vw,10rem)] font-black uppercase leading-none tracking-tight">Services</h2></FadeIn><div className="mx-auto max-w-7xl border-t border-[#070b12]/15">{services.map(([num,name,desc],i)=><FadeIn key={name} delay={i*.05}><Tilt max={2.5}><article className="group grid gap-4 border-b border-[#070b12]/15 py-8 transition-all duration-500 hover:bg-[#070b12]/[.035] hover:px-4 sm:grid-cols-[.7fr_1.6fr] sm:items-center md:py-12"><span className="bg-[linear-gradient(135deg,#00e5ff,#1687ff_45%,#7c3aed)] bg-clip-text text-[clamp(3rem,9vw,8.75rem)] font-black leading-none text-transparent opacity-25 transition-opacity duration-500 group-hover:opacity-100">{num}</span><div className="flex items-center justify-between gap-6"><div><h3 className="text-2xl font-bold uppercase transition-transform duration-500 group-hover:translate-x-2 sm:text-4xl">{name}</h3><p className="mt-3 max-w-xl text-base font-light text-[#475569] sm:text-lg">{desc}</p></div><ArrowRight className="hidden h-8 w-8 shrink-0 -translate-x-3 opacity-0 transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100 sm:block" /></div></article></Tilt></FadeIn>)}</div></section>; }
 
-type Project = { num: string; tag: string; name: string; desc: string; imgs: [string, string, string] };
+type Shot = { src: string; label: string };
+type Project = { num: string; tag: string; name: string; desc: string; fit: 'cover' | 'contain'; imgs: [Shot, Shot, Shot] };
 const projects: Project[] = [
-  {num:'01',tag:'AI WEBSITE',name:'AI Commerce Experience',desc:'High-converting AI-powered ecommerce experience designed for a modern digital brand.',imgs:[commerce,analytics,commerce]},
-  {num:'02',tag:'AI AGENT',name:'Intelligent Support Agent',desc:'An AI customer support system designed to answer questions, qualify leads, and automate repetitive conversations.',imgs:[agent,analytics,agent]},
-  {num:'03',tag:'AI AUTOMATION',name:'Smart Business Automation',desc:'An automated AI workflow connecting customer interactions, leads, notifications, and business operations.',imgs:[automation,agent,automation]},
+  {num:'01',tag:'AI WEBSITES',name:'AI Website Development',desc:'High-converting AI-powered websites designed for modern ecommerce, beauty, and hospitality brands.',fit:'cover',imgs:[
+    {src:velora.url,label:'VELORA — AI ecommerce experience'},
+    {src:salon.url,label:'Luxury beauty salon website'},
+    {src:restaurant.url,label:'Restaurant website homepage'},
+  ]},
+  {num:'02',tag:'AI AGENTS',name:'Intelligent AI Agents',desc:'Production AI agent workflows that reply, qualify, and resolve across WhatsApp, email, and support tickets.',fit:'contain',imgs:[
+    {src:agentWhatsapp.url,label:'WhatsApp AI agent workflow'},
+    {src:agentGmail.url,label:'Gmail AI agent workflow'},
+    {src:agentSupport.url,label:'Support ticket AI agent workflow'},
+  ]},
 ];
-function ProjectCard({ project, index }: { project: Project; index: number }) { const ref=useRef<HTMLElement>(null); const {scrollYProgress}=useScroll({target:ref,offset:['start end','start start']}); const scale=useTransform(scrollYProgress,[0,1],[1,1-(projects.length-1-index)*.03]); return <motion.article ref={ref} style={{scale,top:`${96+index*28}px`}} className="sticky mb-10 h-[78svh] min-h-[540px] will-change-transform sm:mb-16 md:mb-20 overflow-hidden rounded-[32px] border-2 border-[#25354a] bg-secondary p-5 shadow-[0_0_50px_rgba(0,229,255,.06)] transition-[border-color,box-shadow] duration-500 hover:border-primary/40 hover:shadow-[0_0_80px_rgba(0,229,255,.16)] md:h-[85vh] md:rounded-[50px] md:p-8"><div className="mb-6 grid grid-cols-[auto_1fr] gap-4 md:grid-cols-[auto_1fr_auto] md:items-center"><span className="text-6xl font-black text-primary md:text-8xl">{project.num}</span><div><p className="text-xs tracking-[.2em] text-primary">{project.tag}</p><h3 className="text-2xl font-bold uppercase md:text-4xl">{project.name}</h3><p className="mt-2 max-w-xl text-sm text-[#b8c7d9] md:text-base">{project.desc}</p></div><Button variant="outline" className="hidden rounded-full border-foreground/20 bg-transparent text-foreground hover:bg-foreground/10 hover:text-foreground md:inline-flex">View Project <ArrowRight/></Button></div><Tilt max={4} className="h-[calc(100%-160px)]"><div className="grid h-full grid-cols-[.4fr_.6fr] gap-3"><div className="grid gap-3 overflow-hidden"><ProjectImage src={project.imgs[0]}/><ProjectImage src={project.imgs[1]}/></div><ProjectImage src={project.imgs[2]}/></div></Tilt></motion.article>; }
-function ProjectImage({src}:{src:string}) { return <div className="min-h-0 overflow-hidden rounded-2xl border border-foreground/10"><img src={src} alt="AI project interface" loading="lazy" width={1280} height={800} className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.03]"/></div>; }
-function ProjectsSection() { return <section id="projects" className="relative z-10 -mt-10 rounded-t-[40px] bg-background px-4 py-20 sm:px-8 sm:py-24 md:-mt-14 md:rounded-t-[60px] md:px-10 md:py-32"><FadeIn><h2 className="hero-heading mb-16 text-center text-[clamp(3rem,11vw,9rem)] font-black uppercase leading-none tracking-tight">Selected Work</h2></FadeIn><div className="mx-auto max-w-7xl">{projects.map((p,i)=><ProjectCard key={p.name} project={p} index={i}/>)}</div></section>; }
+
+function Lightbox({ shot, onClose }: { shot: Shot | null; onClose: () => void }) {
+  useEffect(() => {
+    if (!shot) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [shot, onClose]);
+  return <AnimatePresence>
+    {shot && <motion.div role="dialog" aria-modal aria-label={shot.label} onClick={onClose} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:.25}} className="fixed inset-0 z-[80] flex items-center justify-center bg-background/90 p-4 backdrop-blur-xl sm:p-10">
+      <motion.img initial={{opacity:0,scale:.94}} animate={{opacity:1,scale:1}} exit={{opacity:0,scale:.96}} transition={{duration:.35,ease:[.25,.1,.25,1]}} src={shot.src} alt={shot.label} className="max-h-full max-w-full rounded-2xl border border-primary/25 object-contain shadow-[0_0_90px_rgba(0,229,255,.2)]" />
+      <button onClick={onClose} aria-label="Close preview" className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full border border-foreground/15 bg-secondary/60 text-foreground backdrop-blur-lg transition-colors hover:border-primary/50 hover:text-primary"><X className="h-5 w-5" /></button>
+    </motion.div>}
+  </AnimatePresence>;
+}
+function ProjectCard({ project, index, onOpen }: { project: Project; index: number; onOpen: (s: Shot) => void }) { const ref=useRef<HTMLElement>(null); const {scrollYProgress}=useScroll({target:ref,offset:['start end','start start']}); const scale=useTransform(scrollYProgress,[0,1],[1,1-(projects.length-1-index)*.03]); return <motion.article ref={ref} style={{scale,top:`${96+index*28}px`}} className="sticky mb-10 h-[78svh] min-h-[540px] will-change-transform sm:mb-16 md:mb-20 overflow-hidden rounded-[32px] border-2 border-[#25354a] bg-secondary p-5 shadow-[0_0_50px_rgba(0,229,255,.06)] transition-[border-color,box-shadow] duration-500 hover:border-primary/40 hover:shadow-[0_0_80px_rgba(0,229,255,.16)] md:h-[85vh] md:rounded-[50px] md:p-8"><div className="mb-6 grid grid-cols-[auto_1fr] gap-4 md:grid-cols-[auto_1fr_auto] md:items-center"><span className="text-6xl font-black text-primary md:text-8xl">{project.num}</span><div><p className="text-xs tracking-[.2em] text-primary">{project.tag}</p><h3 className="text-2xl font-bold uppercase md:text-4xl">{project.name}</h3><p className="mt-2 max-w-xl text-sm text-[#b8c7d9] md:text-base">{project.desc}</p></div><Button variant="outline" onClick={()=>onOpen(project.imgs[0])} className="hidden rounded-full border-foreground/20 bg-transparent text-foreground hover:bg-foreground/10 hover:text-foreground md:inline-flex">View Project <ArrowRight/></Button></div><Tilt max={4} className="h-[calc(100%-170px)]"><div className="grid h-full gap-3 sm:grid-cols-3">{project.imgs.map(shot=><ProjectImage key={shot.label} shot={shot} fit={project.fit} onOpen={onOpen}/>)}</div></Tilt></motion.article>; }
+function ProjectImage({shot,fit,onOpen}:{shot:Shot;fit:'cover'|'contain';onOpen:(s:Shot)=>void}) { return <button type="button" onClick={()=>onOpen(shot)} aria-label={`Preview ${shot.label}`} className="group relative min-h-0 overflow-hidden rounded-2xl border border-foreground/10 bg-[#070b12] transition-all duration-500 hover:border-primary/40 hover:shadow-[0_0_45px_rgba(0,229,255,.18)]"><img src={shot.src} alt={shot.label} loading="lazy" className={`h-full w-full ${fit==='cover'?'object-cover object-top':'object-contain p-2'} transition-transform duration-700 group-hover:scale-[1.04]`}/><span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-[#070b12] to-transparent p-3 text-left text-xs uppercase tracking-widest text-[#dcebfa] opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">{shot.label}</span></button>; }
+function ProjectsSection() { const [shot,setShot]=useState<Shot|null>(null); return <section id="projects" className="relative z-10 -mt-10 rounded-t-[40px] bg-background px-4 py-20 sm:px-8 sm:py-24 md:-mt-14 md:rounded-t-[60px] md:px-10 md:py-32"><FadeIn><h2 className="hero-heading mb-16 text-center text-[clamp(3rem,11vw,9rem)] font-black uppercase leading-none tracking-tight">Selected Work</h2></FadeIn><div className="mx-auto max-w-7xl">{projects.map((p,i)=><ProjectCard key={p.name} project={p} index={i} onOpen={setShot}/>)}</div><Lightbox shot={shot} onClose={()=>setShot(null)}/></section>; }
 
 function ContactSection() { return <section id="contact" className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4 py-20 text-center sm:px-6 sm:py-24"><div className="pointer-events-none absolute h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgba(0,229,255,.16),rgba(124,58,237,.1)_38%,transparent_70%)] blur-2xl"/><FadeIn className="relative z-10 max-w-6xl"><Sparkles className="mx-auto mb-7 h-9 w-9 text-primary"/><h2 className="hero-heading text-[clamp(3rem,10vw,8.75rem)] font-black uppercase leading-[.9] tracking-tight">Let's build something intelligent.</h2><p className="mx-auto mt-8 max-w-2xl text-lg font-light text-[#b8c7d9]">Have an idea, business problem, or project in mind? Let's turn it into a powerful AI-powered digital experience.</p><div className="mt-10 flex flex-wrap items-center justify-center gap-4"><ContactButton/><Button asChild variant="outline" className="h-14 rounded-full border-foreground/20 bg-transparent px-7 text-foreground hover:bg-foreground/10 hover:text-foreground"><a href="#services">Explore Services <ArrowRight/></a></Button></div></FadeIn></section>; }
 
@@ -190,7 +219,6 @@ function ScrollProgress() {
   return <motion.div style={{ scaleX }} className="fixed inset-x-0 top-0 z-50 h-[3px] origin-left bg-[linear-gradient(90deg,#00e5ff,#1687ff_45%,#7c3aed)] shadow-[0_0_14px_rgba(0,229,255,.5)]" />;
 }
 
-const socials: [string, typeof Twitter][] = [['X / Twitter', Twitter], ['LinkedIn', Linkedin], ['Instagram', Instagram], ['GitHub', Github]];
 
 const INBOX = "squilky.ai@gmail.com";
 
@@ -240,14 +268,9 @@ function SiteFooter() {
       </FadeIn>
 
       <FadeIn delay={.1}>
-        <div className="mt-16 flex flex-col gap-6 border-t border-foreground/10 py-8 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap items-center gap-6">
-            <span className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-secondary/40 px-4 py-2 text-xs uppercase tracking-widest text-[#dcebfa] backdrop-blur-lg"><span className="animate-status h-2 w-2 rounded-full bg-primary" />All systems operational</span>
-            <span className="inline-flex items-center gap-2.5 rounded-full border border-accent/30 bg-secondary/40 px-4 py-2 text-xs uppercase tracking-widest text-[#dcebfa] backdrop-blur-lg"><Sparkles className="h-3.5 w-3.5 text-accent" />Accepting Q4 projects</span>
-          </div>
-          <div className="flex items-center gap-3">
-            {socials.map(([label, Icon]) => <a key={label} href="#contact" aria-label={label} className="flex h-11 w-11 items-center justify-center rounded-full border border-foreground/10 bg-secondary/40 text-[#b8c7d9] backdrop-blur-lg transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:text-primary hover:shadow-[0_0_25px_rgba(0,229,255,.25)]"><Icon className="h-4.5 w-4.5" /></a>)}
-          </div>
+        <div className="mt-16 flex flex-wrap items-center justify-center gap-4 border-t border-foreground/10 py-8">
+          <span className="inline-flex items-center gap-2.5 rounded-full border border-primary/25 bg-secondary/40 px-4 py-2 text-xs uppercase tracking-widest text-[#dcebfa] backdrop-blur-lg"><span className="animate-status h-2 w-2 rounded-full bg-primary" />All systems operational</span>
+          <span className="inline-flex items-center gap-2.5 rounded-full border border-accent/30 bg-secondary/40 px-4 py-2 text-xs uppercase tracking-widest text-[#dcebfa] backdrop-blur-lg"><Sparkles className="h-3.5 w-3.5 text-accent" />Accepting Q4 projects</span>
         </div>
       </FadeIn>
 
