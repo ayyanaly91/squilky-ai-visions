@@ -10,6 +10,12 @@ import commerce from "@/assets/dashboard-commerce.jpg";
 import agent from "@/assets/dashboard-agent.jpg";
 import automation from "@/assets/dashboard-automation.jpg";
 import analytics from "@/assets/dashboard-analytics.jpg";
+import velora from "@/assets/work-velora.jpeg.asset.json";
+import salon from "@/assets/work-salon.jpeg.asset.json";
+import restaurant from "@/assets/work-restaurant.jpeg.asset.json";
+import agentWhatsapp from "@/assets/agent-whatsapp.webp.asset.json";
+import agentGmail from "@/assets/agent-gmail.webp.asset.json";
+import agentSupport from "@/assets/agent-support.webp.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
