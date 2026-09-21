@@ -172,12 +172,35 @@ const services = [
 ];
 function ServicesSection() { return <section id="services" className="relative rounded-t-[40px] bg-[#f7fafc] px-4 py-16 sm:py-20 text-[#070b12] sm:px-8 md:rounded-t-[60px] md:px-10 md:py-32"><FadeIn><h2 className="mb-16 text-center text-[clamp(3rem,12vw,10rem)] font-black uppercase leading-none tracking-tight">Services</h2></FadeIn><div className="mx-auto max-w-7xl border-t border-[#070b12]/15">{services.map(([num,name,desc],i)=><FadeIn key={name} delay={i*.05}><Tilt max={2.5}><article className="group grid gap-4 border-b border-[#070b12]/15 py-8 transition-all duration-500 hover:bg-[#070b12]/[.035] hover:px-4 sm:grid-cols-[.7fr_1.6fr] sm:items-center md:py-12"><span className="bg-[linear-gradient(135deg,#00e5ff,#1687ff_45%,#7c3aed)] bg-clip-text text-[clamp(3rem,9vw,8.75rem)] font-black leading-none text-transparent opacity-25 transition-opacity duration-500 group-hover:opacity-100">{num}</span><div className="flex items-center justify-between gap-6"><div><h3 className="text-2xl font-bold uppercase transition-transform duration-500 group-hover:translate-x-2 sm:text-4xl">{name}</h3><p className="mt-3 max-w-xl text-base font-light text-[#475569] sm:text-lg">{desc}</p></div><ArrowRight className="hidden h-8 w-8 shrink-0 -translate-x-3 opacity-0 transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100 sm:block" /></div></article></Tilt></FadeIn>)}</div></section>; }
 
-type Project = { num: string; tag: string; name: string; desc: string; imgs: [string, string, string] };
+type Shot = { src: string; label: string };
+type Project = { num: string; tag: string; name: string; desc: string; fit: 'cover' | 'contain'; imgs: [Shot, Shot, Shot] };
 const projects: Project[] = [
-  {num:'01',tag:'AI WEBSITE',name:'AI Commerce Experience',desc:'High-converting AI-powered ecommerce experience designed for a modern digital brand.',imgs:[commerce,analytics,commerce]},
-  {num:'02',tag:'AI AGENT',name:'Intelligent Support Agent',desc:'An AI customer support system designed to answer questions, qualify leads, and automate repetitive conversations.',imgs:[agent,analytics,agent]},
-  {num:'03',tag:'AI AUTOMATION',name:'Smart Business Automation',desc:'An automated AI workflow connecting customer interactions, leads, notifications, and business operations.',imgs:[automation,agent,automation]},
+  {num:'01',tag:'AI WEBSITES',name:'AI Website Development',desc:'High-converting AI-powered websites designed for modern ecommerce, beauty, and hospitality brands.',fit:'cover',imgs:[
+    {src:velora.url,label:'VELORA — AI ecommerce experience'},
+    {src:salon.url,label:'Luxury beauty salon website'},
+    {src:restaurant.url,label:'Restaurant website homepage'},
+  ]},
+  {num:'02',tag:'AI AGENTS',name:'Intelligent AI Agents',desc:'Production AI agent workflows that reply, qualify, and resolve across WhatsApp, email, and support tickets.',fit:'contain',imgs:[
+    {src:agentWhatsapp.url,label:'WhatsApp AI agent workflow'},
+    {src:agentGmail.url,label:'Gmail AI agent workflow'},
+    {src:agentSupport.url,label:'Support ticket AI agent workflow'},
+  ]},
 ];
+
+function Lightbox({ shot, onClose }: { shot: Shot | null; onClose: () => void }) {
+  useEffect(() => {
+    if (!shot) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [shot, onClose]);
+  return <AnimatePresence>
+    {shot && <motion.div role="dialog" aria-modal aria-label={shot.label} onClick={onClose} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:.25}} className="fixed inset-0 z-[80] flex items-center justify-center bg-background/90 p-4 backdrop-blur-xl sm:p-10">
+      <motion.img initial={{opacity:0,scale:.94}} animate={{opacity:1,scale:1}} exit={{opacity:0,scale:.96}} transition={{duration:.35,ease:[.25,.1,.25,1]}} src={shot.src} alt={shot.label} className="max-h-full max-w-full rounded-2xl border border-primary/25 object-contain shadow-[0_0_90px_rgba(0,229,255,.2)]" />
+      <button onClick={onClose} aria-label="Close preview" className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full border border-foreground/15 bg-secondary/60 text-foreground backdrop-blur-lg transition-colors hover:border-primary/50 hover:text-primary"><X className="h-5 w-5" /></button>
+    </motion.div>}
+  </AnimatePresence>;
+}
 function ProjectCard({ project, index }: { project: Project; index: number }) { const ref=useRef<HTMLElement>(null); const {scrollYProgress}=useScroll({target:ref,offset:['start end','start start']}); const scale=useTransform(scrollYProgress,[0,1],[1,1-(projects.length-1-index)*.03]); return <motion.article ref={ref} style={{scale,top:`${96+index*28}px`}} className="sticky mb-10 h-[78svh] min-h-[540px] will-change-transform sm:mb-16 md:mb-20 overflow-hidden rounded-[32px] border-2 border-[#25354a] bg-secondary p-5 shadow-[0_0_50px_rgba(0,229,255,.06)] transition-[border-color,box-shadow] duration-500 hover:border-primary/40 hover:shadow-[0_0_80px_rgba(0,229,255,.16)] md:h-[85vh] md:rounded-[50px] md:p-8"><div className="mb-6 grid grid-cols-[auto_1fr] gap-4 md:grid-cols-[auto_1fr_auto] md:items-center"><span className="text-6xl font-black text-primary md:text-8xl">{project.num}</span><div><p className="text-xs tracking-[.2em] text-primary">{project.tag}</p><h3 className="text-2xl font-bold uppercase md:text-4xl">{project.name}</h3><p className="mt-2 max-w-xl text-sm text-[#b8c7d9] md:text-base">{project.desc}</p></div><Button variant="outline" className="hidden rounded-full border-foreground/20 bg-transparent text-foreground hover:bg-foreground/10 hover:text-foreground md:inline-flex">View Project <ArrowRight/></Button></div><Tilt max={4} className="h-[calc(100%-160px)]"><div className="grid h-full grid-cols-[.4fr_.6fr] gap-3"><div className="grid gap-3 overflow-hidden"><ProjectImage src={project.imgs[0]}/><ProjectImage src={project.imgs[1]}/></div><ProjectImage src={project.imgs[2]}/></div></Tilt></motion.article>; }
 function ProjectImage({src}:{src:string}) { return <div className="min-h-0 overflow-hidden rounded-2xl border border-foreground/10"><img src={src} alt="AI project interface" loading="lazy" width={1280} height={800} className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.03]"/></div>; }
 function ProjectsSection() { return <section id="projects" className="relative z-10 -mt-10 rounded-t-[40px] bg-background px-4 py-20 sm:px-8 sm:py-24 md:-mt-14 md:rounded-t-[60px] md:px-10 md:py-32"><FadeIn><h2 className="hero-heading mb-16 text-center text-[clamp(3rem,11vw,9rem)] font-black uppercase leading-none tracking-tight">Selected Work</h2></FadeIn><div className="mx-auto max-w-7xl">{projects.map((p,i)=><ProjectCard key={p.name} project={p} index={i}/>)}</div></section>; }
