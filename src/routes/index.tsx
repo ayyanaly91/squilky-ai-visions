@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowDownRight, ArrowRight, ArrowUp, Bot, ChartNoAxesCombined, CircuitBoard, Github, Instagram, Linkedin, Mail, Send, Sparkles, Twitter, Workflow } from "lucide-react";
+import { ArrowDownRight, ArrowRight, ArrowUp, Bot, ChartNoAxesCombined, CircuitBoard, Mail, Send, Sparkles, Workflow, X } from "lucide-react";
 import { AnimatePresence, animate, motion, useInView, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
 import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 
